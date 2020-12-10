@@ -5,9 +5,11 @@ class FeatureData:
     def __init__(self, input_dir):
         base_path = 'data/'
         input_path = os.path.join(base_path, input_dir)
-        print(os.path.isdir(input_path))
-        classes = [entry for entry in os.listdir(input_path) if os.path.isdir(os.path.join(input_path, entry))]
-        print(classes)
+        if os.path.isdir(input_path):
+            classes = [entry for entry in os.listdir(input_path) if os.path.isdir(os.path.join(input_path, entry))]
+            print(classes)
+        else:
+            print(f"Directory: {input_path} is not exist")
         # set attrib as directory names from data_without_background directory
         # if go to binarize() -> return binarised image
         # if go to original() -> retunr original image
