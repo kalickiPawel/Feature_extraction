@@ -247,6 +247,7 @@ def classify_fft(img, clf, real_value, classes_names, size):
 
 if __name__ == "__main__":
     feature_obj = FeatureData('no_bg')
+    print(feature_obj)
     for key in feature_obj.classes:
         print(feature_obj.__getattribute__(key))
     # preprocessing()

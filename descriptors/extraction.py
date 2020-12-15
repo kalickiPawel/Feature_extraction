@@ -37,6 +37,9 @@ class FeatureData:
         # getsize of image
         # return image
 
+    def __str__(self):
+        return f"Ilość klas dla ekstrakcji: {self.child_nbr}"
+
     def load_data(self):
         pass
 
