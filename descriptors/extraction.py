@@ -10,15 +10,18 @@ class FeatureClass:
     class_path = ''
     img_list = []
 
-    def __init__(self, class_name):
+    def __init__(self, class_name, input_dir):
         self.class_name = class_name
+        classes_dir = os.path.join(base_path, input_dir, class_name)
+        self.num_of_elements = len([name for name in os.listdir(classes_dir)
+                                    if os.path.isfile(os.path.join(classes_dir, name))])
+        # TODO: Load to objects images
 
     def __str__(self):
         return f"Klasa: {self.class_name} -> {self.num_of_elements} zdjęć"
 
 
 class FeatureData:
-    base_path = 'data'
     classes = []
 
     def __init__(self, input_dir):
