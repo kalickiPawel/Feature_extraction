@@ -61,9 +61,10 @@ class FeatureClass:
 
 
 class FeatureData:
-    classes = []
+    class_names = []
 
     def __init__(self, input_dir):
+        self.classes = []
         self.child_nbr = None
         self.input_dir = input_dir
         self.load_data()
@@ -79,11 +80,13 @@ class FeatureData:
         input_path = os.path.join(base_path, self.input_dir)
         if os.path.isdir(base_path):
             if os.path.isdir(input_path):
-                self.classes = [e for e in os.listdir(input_path) if os.path.isdir(os.path.join(input_path, e))]
-                if self.classes is not None:
-                    for key in self.classes:
-                        setattr(self, key, FeatureClass(key, self.input_dir))
-                    setattr(self, 'child_nbr', len(self.classes))
+                self.class_names = [e for e in os.listdir(input_path) if os.path.isdir(os.path.join(input_path, e))]
+                if self.class_names is not None:
+                    for key in self.class_names:
+                        f_c = FeatureClass(key, self.input_dir)
+                        self.classes.append(f_c)
+                        setattr(self, key, f_c)
+                    setattr(self, 'child_nbr', len(self.class_names))
             else:
                 print(f"Directory: {self.input_dir} is not exist")
         else:
