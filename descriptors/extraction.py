@@ -18,18 +18,9 @@ class FeatureData:
     classes = []
 
     def __init__(self, input_dir):
-        input_path = os.path.join(self.base_path, input_dir)
-        if os.path.isdir(self.base_path):
-            if os.path.isdir(input_path):
-                self.classes = [e for e in os.listdir(input_path) if os.path.isdir(os.path.join(input_path, e))]
-                if self.classes is not None:
-                    for key in self.classes:
-                        setattr(self, key, FeatureClass(key))
-                    # setattr(self, 'child_nbr', len(child_names))
-            else:
-                print(f"Directory: {input_dir} is not exist")
-        else:
-            print(f"Directory: {self.base_path} is not exist")
+        self.child_nbr = None
+        self.input_dir = input_dir
+        self.load_data()
         # if go to binarize() -> return binarised image
         # if go to original() -> retunr original image
         # if binarize on all object -> make that for all data
@@ -41,7 +32,18 @@ class FeatureData:
         return f"Ilość klas dla ekstrakcji: {self.child_nbr}"
 
     def load_data(self):
-        pass
+        input_path = os.path.join(base_path, self.input_dir)
+        if os.path.isdir(base_path):
+            if os.path.isdir(input_path):
+                self.classes = [e for e in os.listdir(input_path) if os.path.isdir(os.path.join(input_path, e))]
+                if self.classes is not None:
+                    for key in self.classes:
+                        setattr(self, key, FeatureClass(key, self.input_dir))
+                    setattr(self, 'child_nbr', len(self.classes))
+            else:
+                print(f"Directory: {self.input_dir} is not exist")
+        else:
+            print(f"Directory: {base_path} is not exist")
 
     def binarize(self):
         # TODO: object.binarize() -> go through all directories and make binarization
