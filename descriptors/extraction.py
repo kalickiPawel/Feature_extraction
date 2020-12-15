@@ -67,12 +67,6 @@ class FeatureData:
         self.child_nbr = None
         self.input_dir = input_dir
         self.load_data()
-        # if go to binarize() -> return binarised image
-        # if go to original() -> retunr original image
-        # if binarize on all object -> make that for all data
-        # if binarize on one object -> make that for one image
-        # getsize of image
-        # return image
 
     def __str__(self):
         return f"Ilość klas dla ekstrakcji: {self.child_nbr}"
@@ -102,8 +96,4 @@ class FeatureData:
         print('Binarize process ---- DONE')
 
     def getBinarized(self):
-        # TODO: object.getBinarized() -> go through all directories and make binarization
-        # TODO: object.class.getBinarized() -> go through class directory and make binarization
-        # TODO: object.class.img.getBinarized() -> make one image binarization
-        # return list of images
         pass
