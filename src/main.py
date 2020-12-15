@@ -248,10 +248,9 @@ def classify_fft(img, clf, real_value, classes_names, size):
 if __name__ == "__main__":
     feature_obj = FeatureData('no_bg')
     print(feature_obj)
-    for key in feature_obj.classes:
-        print(feature_obj.__getattribute__(key))
-    # preprocessing()
-    #
+    feature_obj.show()
+    feature_obj.binarize('bin')
+
     # train = []
     # for i in range(0, 10):
     # # for i in range(0, 50):

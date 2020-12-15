@@ -38,6 +38,10 @@ class FeatureData:
     def __str__(self):
         return f"Ilość klas dla ekstrakcji: {self.child_nbr}"
 
+    def show(self):
+        for i, key in enumerate(self.class_names):
+            print(self.__getattribute__(key))
+
     def load_data(self):
         input_path = os.path.join(base_path, self.input_dir)
         if os.path.isdir(base_path):
@@ -52,12 +56,11 @@ class FeatureData:
         else:
             print(f"Directory: {base_path} is not exist")
 
-    def binarize(self):
-        # TODO: object.binarize() -> go through all directories and make binarization
-        # TODO: object.class.binarize() -> go through class directory and make binarization
-        # TODO: object.class.img.binarize() -> make one image binarization
-        # return 0 -> but will create files
-        pass
+    def binarize(self, output_dir_name):
+        for class_name in self.classes:
+            class_name.load_images()
+            class_name.preprocessing(output_dir_name)
+        print('Binarize process ---- DONE')
 
     def getBinarized(self):
         # TODO: object.getBinarized() -> go through all directories and make binarization
