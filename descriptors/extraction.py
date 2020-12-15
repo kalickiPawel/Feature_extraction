@@ -12,15 +12,18 @@ root = get_project_root()
 
 class FeatureClass:
     num_of_elements = 0
-    class_path = ''
-    img_list = []
+    class_dir = None
+    img_names = []
+    img_paths = []
+    images = []
 
     def __init__(self, class_name, input_dir):
         self.class_name = class_name
-        classes_dir = os.path.join(base_path, input_dir, class_name)
-        self.num_of_elements = len([name for name in os.listdir(classes_dir)
-                                    if os.path.isfile(os.path.join(classes_dir, name))])
-        # TODO: Load to objects images
+        self.class_dir = os.path.join(base_path, input_dir, class_name)
+        self.num_of_elements = len([name for name in os.listdir(self.class_dir)
+                                    if os.path.isfile(os.path.join(self.class_dir, name))])
+        self.load_files()
+        self.img_paths = [os.path.join(self.class_dir, f) for f in self.img_names]
 
     def __str__(self):
         return f"Klasa: {self.class_name} -> {self.num_of_elements} zdjęć"
