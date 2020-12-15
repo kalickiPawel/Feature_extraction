@@ -1,5 +1,10 @@
 import os
+import cv2
+import numpy as np
 from src.utils import get_project_root
+from skimage import io, img_as_ubyte
+from skimage.color import rgb2gray, rgba2rgb
+from skimage.filters import threshold_triangle
 
 base_path = 'data'
 root = get_project_root()
@@ -19,6 +24,37 @@ class FeatureClass:
 
     def __str__(self):
         return f"Klasa: {self.class_name} -> {self.num_of_elements} zdjęć"
+
+    def load_files(self):
+        self.img_names = [file for file in os.listdir(self.class_dir) if file.endswith('.png')]
+
+    def load_images(self):
+        self.images = [io.imread(p) for p in self.img_paths]
+
+    def preprocessing(self, output_dir_name):
+        for i, img in enumerate(self.images):
+            output_dir = os.path.join(base_path, output_dir_name)
+            if not os.path.isdir(output_dir):
+                print(f"Directory {output_dir_name} not found.")
+                os.mkdir(output_dir)
+                print("Directory '%s' created" % output_dir_name)
+
+            output_dir_class = os.path.join(output_dir, self.class_name)
+            if not os.path.isdir(output_dir_class):
+                print(f"Directory {self.class_name} not found.")
+                os.mkdir(output_dir_class)
+                print("Directory '%s' created" % self.class_name)
+
+            path_img_target = os.path.join(output_dir_class, self.img_names[i])
+            if not os.path.isfile(path_img_target):
+                img = cv2.fastNlMeansDenoisingColored(img, None, 10, 10, 7)
+                img2 = rgb2gray(rgba2rgb(img))
+                kernel = np.ones((5, 5), np.uint8)
+                img2 = cv2.dilate(img2, kernel, iterations=2)
+                thresh = threshold_triangle(img2)
+                binary = img2 < thresh
+                io.imsave(path_img_target, img_as_ubyte(binary))
+                print(f"{path_img_target} ---- DONE")
 
 
 class FeatureData:

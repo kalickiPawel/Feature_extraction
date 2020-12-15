@@ -8,9 +8,9 @@ from skimage import data
 from skimage.filters import try_all_threshold
 from sklearn import svm
 import os
-from skimage.color import rgb2gray, rgba2rgb
+
 from skimage import io
-from skimage.filters import threshold_otsu, threshold_minimum, threshold_triangle, threshold_local, rank, threshold_yen
+
 from skimage.morphology import disk
 import numpy as np
 import matplotlib.image as im
@@ -18,37 +18,6 @@ from pathlib import Path
 
 from descriptors.extraction import FeatureData
 
-
-def preprocessing():
-
-    folders = ["animals", "brass", "buildings", "columns",
-               "flowers", "iron", "leaves", "people",
-               "wood", "handrails"]
-
-    for name in folders:
-        for i in range(0, 10):
-            filename = "./data/no_bg/" + name + "/" + str(i) + ".png"
-            img = io.imread(filename)
-            img = cv2.fastNlMeansDenoisingColored(img, None, 10, 10, 7)
-            img2 = rgb2gray(rgba2rgb(img))
-            kernel = np.ones((5,5), np.uint8)
-            img2 = cv2.dilate(img2, kernel, iterations=2)
-            thresh = threshold_triangle(img2)
-            binary = img2 < thresh
-
-
-            # selem = disk(10)
-            # local_otsu = rank.otsu(img2, selem)
-            # threshold_global_otsu = threshold_otsu(img2)
-            # global_otsu = img2 >= local_otsu
-
-            # plt.imshow(binary, cmap=plt.cm.gray)
-            # plt.axis('off')
-            # plt.show()
-
-            path_img_target = os.path.join("./data/binarized/" + name + "/" + str(i) + ".png")
-            io.imsave(path_img_target, skimage.img_as_ubyte(binary))
-            print("./data/binarized/" + name + "/" + str(i) + ".png ---- DONE" )
 
 
 def area_desc(img):
