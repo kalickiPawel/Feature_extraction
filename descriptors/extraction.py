@@ -1,4 +1,8 @@
 import os
+from src.utils import get_project_root
+
+base_path = 'data'
+root = get_project_root()
 
 
 class FeatureClass:
