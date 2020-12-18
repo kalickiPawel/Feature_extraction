@@ -16,7 +16,7 @@ import numpy as np
 import matplotlib.image as im
 from pathlib import Path
 
-from descriptors.extraction import FeatureData
+from descriptors import FeatureData, SimpleDescriptors, FourierDescriptor, SignatureDescriptors
 
 
 
@@ -218,7 +218,9 @@ if __name__ == "__main__":
     feature_obj = FeatureData('no_bg')
     print(feature_obj)
     feature_obj.show()
-    feature_obj.binarize('bin')
+    feature_obj.bin('bin')
+
+    simple_desc = SimpleDescriptors()
 
     # train = []
     # for i in range(0, 10):
@@ -250,7 +252,14 @@ if __name__ == "__main__":
     # print("Poprawność - kołowość: ", scores[2], "%")
     # print("Poprawność - zwartość: ", scores[3], "%")
     # print("Poprawność - obwód powłoki wypukłej: ", scores[4], "%")
-    #
+
+
+
+
+
+
+
+
     # trainImgsPaths = Path(r'data/learning/_TRAIN').glob('*.png')
     #
     # trainImgs = [cv2.imread(str(p), cv2.IMREAD_GRAYSCALE) for p in trainImgsPaths]
@@ -278,8 +287,8 @@ if __name__ == "__main__":
     #     print('-------------------------------------------')
     #     scores = sum(results) / len(results) * 100
     #     print(f'Poprawność - Fourier [{fft_size}x{fft_size}]: {scores}%')
-    #
-    # #plt.imshow(img, cmap=plt.cm.gray)
-    # #plt.show()
-    # #print(img)
-    # #example_of_descs(img)
+
+    #plt.imshow(img, cmap=plt.cm.gray)
+    #plt.show()
+    #print(img)
+    #example_of_descs(img)
