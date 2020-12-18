@@ -221,7 +221,9 @@ if __name__ == "__main__":
     feature_obj.bin('bin')
     path, train_paths, test_paths = feature_obj.split_test_train()
 
-    simple_desc = SimpleDescriptors()
+    simple_desc = SimpleDescriptors(path, train_paths, test_paths)
+    # simple_desc.fit()
+
 
     # train = []
     # for i in range(0, 10):
