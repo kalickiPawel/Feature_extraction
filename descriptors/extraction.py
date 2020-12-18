@@ -26,7 +26,7 @@ class FeatureClass:
         self.img_paths = [os.path.join(self.class_dir, f) for f in self.img_names]
 
     def __str__(self):
-        return f"Klasa: {self.class_name} -> {self.num_of_elements} zdjęć"
+        return f"Class: {self.class_name} -> {self.num_of_elements} images"
 
     def load_files(self):
         self.img_names = [file for file in os.listdir(self.class_dir) if file.endswith('.png')]
@@ -70,7 +70,7 @@ class FeatureData:
         self.load_data()
 
     def __str__(self):
-        return f"Ilość klas dla ekstrakcji: {self.child_nbr}"
+        return f"Number of classes for extraction: {self.child_nbr}"
 
     def show(self):
         for i, key in enumerate(self.class_names):
@@ -92,11 +92,15 @@ class FeatureData:
         else:
             print(f"Directory: {base_path} is not exist")
 
-    def binarize(self, output_dir_name):
+    def bin(self, output_dir_name):
         for class_name in self.classes:
             class_name.load_images()
             class_name.preprocessing(output_dir_name)
         print('Binarize process ---- DONE')
 
-    def getBinarized(self):
-        pass
+    def get_bin(self):
+        img_bin = [io.imread(p) for p in self.img_paths]
+
+    def split_test_train(self):
+        print(os.path.join(base_path, 'training'))
+
