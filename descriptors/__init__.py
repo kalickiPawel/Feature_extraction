@@ -1,0 +1,4 @@
+from descriptors.extraction import FeatureData
+from descriptors.simple import SimpleDescriptors
+from descriptors.fourier import FourierDescriptor
+from descriptors.signature import SignatureDescriptors
