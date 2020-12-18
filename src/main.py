@@ -219,6 +219,7 @@ if __name__ == "__main__":
     print(feature_obj)
     feature_obj.show()
     feature_obj.bin('bin')
+    path, train_paths, test_paths = feature_obj.split_test_train()
 
     simple_desc = SimpleDescriptors()
 

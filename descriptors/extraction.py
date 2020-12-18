@@ -69,6 +69,7 @@ class FeatureData:
         self.child_nbr = None
         self.input_dir = input_dir
         self.load_data()
+        self.split_test_train()
 
     def __str__(self):
         return f"Number of classes for extraction: {self.child_nbr}"
@@ -109,5 +110,14 @@ class FeatureData:
         return self.is_bin
 
     def split_test_train(self):
-        print(os.path.join(base_path, 'training'))
+        if self.is_binarized():
+            path = os.path.join(root, base_path, 'training')
+            img_train_paths, img_test_paths = [], []
 
+            print('Split data process ---- START')
+            print(path)
+            print('Split data process ---- DONE')
+
+            return path, img_train_paths, img_test_paths
+        else:
+            print("Make binarization process!")
