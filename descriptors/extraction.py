@@ -62,6 +62,7 @@ class FeatureClass:
 
 class FeatureData:
     class_names = []
+    is_bin = False
 
     def __init__(self, input_dir):
         self.classes = []
@@ -93,13 +94,19 @@ class FeatureData:
             print(f"Directory: {base_path} is not exist")
 
     def bin(self, output_dir_name):
+        print('Binarize process ---- START')
         for class_name in self.classes:
             class_name.load_images()
             class_name.preprocessing(output_dir_name)
+        self.is_bin = True
         print('Binarize process ---- DONE')
 
     def get_bin(self):
-        img_bin = [io.imread(p) for p in self.img_paths]
+        pass
+        # img_bin = [io.imread(p) for p in self.img_paths]
+
+    def is_binarized(self):
+        return self.is_bin
 
     def split_test_train(self):
         print(os.path.join(base_path, 'training'))
