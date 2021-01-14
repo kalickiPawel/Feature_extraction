@@ -16,6 +16,8 @@ class FeatureClass:
     class_dir = None
     img_names = []
     img_paths = []
+    bin_dir = None
+    bin_img_paths = []
     images = []
 
     def __init__(self, class_name, input_dir):
@@ -36,7 +38,8 @@ class FeatureClass:
         self.images = [io.imread(p) for p in self.img_paths]
 
     def preprocessing(self, output_dir_name):
-        paths = []
+        self.bin_dir = os.path.join(base_path, output_dir_name, self.class_name)
+        self.bin_img_paths = [os.path.join(self.bin_dir, f) for f in self.img_names]
         for i, img in enumerate(self.images):
             output_dir = os.path.join(base_path, output_dir_name)
             if not os.path.isdir(output_dir):
@@ -60,8 +63,6 @@ class FeatureClass:
                 binary = img2 < thresh
                 io.imsave(path_img_target, img_as_ubyte(binary))
                 print(f"{path_img_target} ---- DONE")
-            paths.append([os.path.join(output_dir_name, self.class_name), self.img_names[i]])
-        return paths
 
 
 class FeatureData:
@@ -71,7 +72,6 @@ class FeatureData:
 
     def __init__(self, input_dir):
         self.bin_path = None
-        self.bin_images_paths = {}
         self.split_path = None
         self.classes = []
         self.child_nbr = None
@@ -105,8 +105,7 @@ class FeatureData:
         print('Binarize process ---- START')
         for class_name in self.classes:
             class_name.load_images()
-            paths = class_name.preprocessing(output_dir_name)
-            self.bin_images_paths[class_name.class_name] = paths
+            class_name.preprocessing(output_dir_name)
         self.is_bin = True
         self.bin_path = output_dir_name
         print('Binarize process ---- DONE')
@@ -114,10 +113,8 @@ class FeatureData:
     def is_binarized(self):
         return self.is_bin
 
-    def load_bin_images(self):
-        self.bin_images = [io.imread(p) for p in self.bin_images_paths]
-
-    def split_paths(self, input, output, step):
+    def split_paths(self, output, step, bin):
+        input_path = []
         test_dir = os.path.join(base_path, output, 'TEST')
         train_dir = os.path.join(base_path, output, 'TRAIN')
         test_paths, train_paths = [], []
@@ -145,34 +142,40 @@ class FeatureData:
                 os.mkdir(train_class_path)
                 print("Directory '%s' created" % train_class_path)
 
-            if self.is_binarized():
-                for bin_dir in self.bin_images_paths:
-                    for i, img_file in enumerate(self.bin_images_paths[bin_dir]):
-                        dest_folder = os.path.join(
-                            train_dir,
-                            bin_dir
-                        ) if i == 0 else os.path.join(
-                            test_dir,
-                            bin_dir
-                        )
+            if bin:
+                if self.is_binarized():
+                    input_path = item.bin_img_paths
+                else:
+                    print("Make binarization process!")
+            else:
+                input_path = item.img_paths
 
-                        if os.path.isdir(dest_folder):
-                            path_to_moved = os.path.join(dest_folder, img_file[1])
-                            if i == 0:
-                                train_paths.append(path_to_moved)
-                            else:
-                                test_paths.append(path_to_moved)
+            for i, img_file in enumerate(input_path):
+                dest_folder = os.path.join(
+                    train_dir,
+                    item.class_name
+                ) if i == 0 else os.path.join(
+                    test_dir,
+                    item.class_name
+                )
 
-                            if not os.path.isfile(path_to_moved):
-                                shutil.copy(os.path.join(root, base_path, *img_file), dest_folder)
-                                print(f"File {img_file[1]} moved.")
-                                print(f"From: {os.path.join(root, base_path, img_file[0])}")
-                                print(f"To: {dest_folder}")
+                if os.path.isdir(dest_folder):
+                    path_to_moved = os.path.join(dest_folder, item.img_names[i])
+                    if i == 0:
+                        train_paths.append(path_to_moved)
+                    else:
+                        test_paths.append(path_to_moved)
+
+                    if not os.path.isfile(path_to_moved):
+                        shutil.copy(os.path.join(root, img_file), dest_folder)
+
+                        print(f"File {item.img_names[i]} moved.")
+                        print(f"From: {os.path.dirname(os.path.join(root, img_file))}")
+                        print(f"To: {dest_folder}")
 
         return (test_dir, train_dir), (train_paths, test_paths)
 
     def split_test_train(self, output_dir_name, bin=False, step=0):
-        input_path = ""
         self.split_path = os.path.join(
             root,
             base_path,
@@ -188,16 +191,8 @@ class FeatureData:
             os.mkdir(self.split_path)
             print("Directory '%s' created" % self.split_path)
 
-        if bin:
-            if self.is_binarized():
-                input_path = os.path.join(root, base_path, self.bin_path)
-            else:
-                print("Make binarization process!")
-        else:
-            input_path = os.path.join(root, base_path, self.input_dir)
-
         print('Split data process ---- START')
-        paths, images = self.split_paths(input_path, self.split_path, step)
+        paths, images = self.split_paths(self.split_path, step, bin)
         img_train_paths, img_test_paths = images
         print('Split data process ---- DONE')
 
