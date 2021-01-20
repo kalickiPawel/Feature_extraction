@@ -12,7 +12,7 @@ class SimpleDescriptors:
     results = []
 
     def __init__(self, train_p, test_p, data_obj):
-        self.class_names = data_obj.class_names
+        self.class_names = sorted(data_obj.class_names)
         self.train_set_paths, self.test_set_paths = train_p, test_p
         self.prepare_img()
         print(f"Number of Train feature: {len(self.train_set)}")
