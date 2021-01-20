@@ -111,6 +111,7 @@ class SimpleDescriptors:
         ]
         res = [self.enc_idx(self.find_nearest(train[i], tmp[i])) for i in range(5)]
 
+        print("Obraz wejściowy: ", img['class_name'])
         print("Deskryptor - pole powierzchni: ", res[0])
         print("Deskryptor - obwód: ", res[1])
         print("Deskryptor - kołowość: ", res[2])
